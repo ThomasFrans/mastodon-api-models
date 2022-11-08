@@ -251,6 +251,65 @@ pub struct Instance {
     pub contact_account: Option<Account>,
 }
 
+#[non_exhaustive]
+pub enum RepliesPolicy {
+    Followed,
+    List,
+    None,
+}
+
+pub struct List {
+    pub id: String,
+    pub title: String,
+    pub replies_policy: RepliesPolicy,
+}
+
+pub struct Marker {
+    pub home: HashMap<String, String>,
+    pub notifications: HashMap<String, String>,
+}
+
+pub struct Mention {
+    pub id: String,
+    pub username: String,
+    pub acct: String,
+    /// Content: URL
+    pub url: String,
+}
+
+pub enum NotificationType {
+    Follow,
+    FollowRequest,
+    Mention,
+    Reblog,
+    Favourite,
+    Poll,
+    Status,
+}
+
+pub struct Notification {
+    pub id: String,
+    pub r#type: NotificationType,
+    /// Content: ISO 8601 datetime
+    pub created_at: String,
+    pub account: Account,
+    pub status: Option<Status>,
+}
+
+pub struct Poll {
+    pub id: String,
+    /// Content: ISO 8601 datetime
+    pub expires_at: Option<String>,
+    pub expired: bool,
+    pub multiple: bool,
+    pub votes_count: u32,
+    pub voters_count: Option<u32>,
+    pub voted: Option<bool>,
+    pub own_votes: Option<Vec<u32>>,
+    pub options: HashMap<String, String>,
+    pub emojis: Vec<Emoji>,
+}
+
 pub struct Source {
     pub note: String,
     pub fields: Vec<Field>,
@@ -306,60 +365,6 @@ pub struct Status {
     pub muted: Option<bool>,
     pub bookmarked: Option<bool>,
     pub pinned: Option<bool>,
-}
-
-pub enum RepliesPolicy {
-    Followed,
-    List,
-    None,
-}
-
-pub struct List {
-    pub id: String,
-    pub title: String,
-    pub replies_policy: RepliesPolicy,
-}
-
-pub struct Marker {
-    pub home: HashMap<String, String>,
-    pub notifications: HashMap<String, String>,
-}
-
-pub struct Mention {
-    pub id: String,
-    pub username: String,
-    pub acct: String,
-    pub url: String,
-}
-
-pub enum NotificationType {
-    Follow,
-    FollowRequest,
-    Mention,
-    Reblog,
-    Favourite,
-    Poll,
-    Status,
-}
-
-pub struct Notification {
-    pub id: String,
-    pub r#type: NotificationType,
-    pub created_at: String,
-    pub account: Account,
-    pub status: Option<Status>,
-}
-
-pub struct Poll {
-    pub id: String,
-    pub expires_at: Option<String>,
-    pub expired: bool,
-    pub multiple: bool,
-    pub votes_count: u32,
-    pub voters_count: Option<u32>,
-    pub voted: Option<bool>,
-    pub own_votes: Vec<HashMap<String, String>>,
-    pub emojis: Vec<Emoji>,
 }
 
 pub enum PostVisibility {
