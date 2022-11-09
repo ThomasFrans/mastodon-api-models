@@ -310,63 +310,7 @@ pub struct Poll {
     pub emojis: Vec<Emoji>,
 }
 
-pub struct Source {
-    pub note: String,
-    pub fields: Vec<Field>,
-    pub privacy: Option<PostPrivacy>,
-    pub sensitive: Option<bool>,
-    pub language: Option<String>,
-    pub follow_requests_count: Option<u32>,
-}
-
 #[non_exhaustive]
-pub enum PostPrivacy {
-    Public,
-    Unlisted,
-    Private,
-    Direct,
-}
-
-#[non_exhaustive]
-pub enum StatusVisibility {
-    Public,
-    Unlisted,
-    Private,
-    Direct,
-}
-
-pub struct Status {
-    pub id: String,
-    pub uri: String,
-    pub created_at: String,
-    pub account: Account,
-    pub content: String,
-    pub visibility: StatusVisibility,
-    pub sensitive: bool,
-    pub spoiler_text: String,
-    pub media_attachments: Vec<Attachment>,
-    pub application: Application,
-    pub mentions: Vec<Mention>,
-    pub tags: Vec<Tag>,
-    pub emojis: Vec<Emoji>,
-    pub reblogs_count: u32,
-    pub favourites_count: u32,
-    pub replies_count: u32,
-    pub url: Option<String>,
-    pub in_remoy_to_id: Option<String>,
-    pub in_reply_to_account_id: Option<String>,
-    pub reblog: Option<Box<Status>>,
-    pub poll: Option<Poll>,
-    pub card: Option<Card>,
-    pub language: Option<String>,
-    pub text: Option<String>,
-    pub favourited: Option<bool>,
-    pub reblogged: Option<bool>,
-    pub muted: Option<bool>,
-    pub bookmarked: Option<bool>,
-    pub pinned: Option<bool>,
-}
-
 pub enum PostVisibility {
     Public,
     Unlisted,
@@ -374,6 +318,7 @@ pub enum PostVisibility {
     Direct,
 }
 
+#[non_exhaustive]
 pub enum ExpandMediaSetting {
     Default,
     ShowAll,
@@ -383,6 +328,7 @@ pub enum ExpandMediaSetting {
 pub struct Preferences {
     pub posting_default_visibility: PostVisibility,
     pub posting_default_sensitive: bool,
+    /// Content: ISO 639 Part 1 language code
     pub posting_default_language: Option<String>,
     pub reading_expand_media: ExpandMediaSetting,
     pub reading_expand_spoilers: bool,
@@ -390,6 +336,7 @@ pub struct Preferences {
 
 pub struct PushSubscription {
     pub id: String,
+    /// Content: URL
     pub endpoint: String,
     pub server_key: String,
     pub alerts: HashMap<String, String>,
@@ -416,20 +363,86 @@ pub struct Report {}
 pub struct Results {
     pub accounts: Vec<Account>,
     pub statuses: Vec<Status>,
+    // TODO: Decide whether it's worth supporting both... (see docs)
     pub hashtags: Vec<Tag>,
 }
 
 pub struct ScheduledStatus {}
 
+#[non_exhaustive]
+pub enum PostPrivacy {
+    Public,
+    Unlisted,
+    Private,
+    Direct,
+}
+
+pub struct Source {
+    pub note: String,
+    pub fields: Vec<Field>,
+    pub privacy: Option<PostPrivacy>,
+    pub sensitive: Option<bool>,
+    /// Content: ISO 639 Part 1 language code
+    pub language: Option<String>,
+    pub follow_requests_count: Option<u32>,
+}
+
+#[non_exhaustive]
+pub enum StatusVisibility {
+    Public,
+    Unlisted,
+    Private,
+    Direct,
+}
+
+pub struct Status {
+    pub id: String,
+    // TODO: Try to find it this really isn't guaranteed to be a valid URI?
+    pub uri: String,
+    /// Content: ISO 8601 datetime
+    pub created_at: String,
+    pub account: Account,
+    /// Content: HTML
+    pub content: String,
+    pub visibility: StatusVisibility,
+    pub sensitive: bool,
+    pub spoiler_text: String,
+    pub media_attachments: Vec<Attachment>,
+    pub application: Application,
+    pub mentions: Vec<Mention>,
+    pub tags: Vec<Tag>,
+    pub emojis: Vec<Emoji>,
+    pub reblogs_count: u32,
+    pub favourites_count: u32,
+    pub replies_count: u32,
+    /// Content: URL
+    pub url: Option<String>,
+    pub in_reply_to_id: Option<String>,
+    pub in_reply_to_account_id: Option<String>,
+    pub reblog: Option<Box<Status>>,
+    pub poll: Option<Poll>,
+    pub card: Option<Card>,
+    /// Content: ISO 639 Part 1 language code
+    pub language: Option<String>,
+    pub text: Option<String>,
+    pub favourited: Option<bool>,
+    pub reblogged: Option<bool>,
+    pub muted: Option<bool>,
+    pub bookmarked: Option<bool>,
+    pub pinned: Option<bool>,
+}
+
 pub struct Tag {
     pub id: String,
+    /// Content: URL
     pub url: String,
-    pub history: Vec<History>,
+    pub history: Option<Vec<History>>,
 }
 
 pub struct Token {
     pub access_token: String,
     pub token_type: String,
     pub scope: String,
+    /// Content: UNIX timestamp
     pub created_at: u32,
 }
